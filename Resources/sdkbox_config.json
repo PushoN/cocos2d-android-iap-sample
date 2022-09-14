@@ -1,0 +1,23 @@
+{
+  "android": {
+    "iap": {
+      "items": {
+        "item1": {
+          "type": "consumable",
+          "id": "item1"
+        }
+      },
+      "key": "your license key"
+    }
+  },
+  "ios": {
+    "iap": {
+      "items": {
+        "item1": {
+          "type": "consumable",
+          "id": "item1"
+        }
+      }
+    }
+  }
+}
