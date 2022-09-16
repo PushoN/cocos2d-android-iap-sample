@@ -2,6 +2,7 @@
 #include "common/ButtonHelper.h"
 #include "common/LabelHelper.h"
 #include "common/JsonParser.h"
+#include "common/AlertDialogBuilder.h"
 
 USING_NS_CC;
 using namespace common;
@@ -143,6 +144,17 @@ void SampleScene::onPurchaseSuccess(const mingos::Product& product) {
     if(product.type == mingos::IAP_Type::CONSUMABLE) {
         mingos::IAP::consume(product.id);
     }
+
+    std::string alertMessage = StringUtils::format(
+        "productId=%s\norderId=%s",
+        product.id.c_str(),
+        product.transactionID.c_str());
+
+    auto builder = AlertDialogBuilder::create();
+    builder->setTitle("purchase success");
+    builder->setMessage(alertMessage);
+    builder->setPositiveButton("OK", nullptr);
+    builder->build()->open(this);
 }
 
 void SampleScene::onPurchaseFailure(const mingos::Product& product, const mingos::BillingResponseCode& responseCode, const std::string& msg) {
@@ -154,6 +166,18 @@ void SampleScene::onPurchaseFailure(const mingos::Product& product, const mingos
             mingos::IAP::consume(product.id);
         }
     }
+
+    std::string alertMessage = StringUtils::format(
+        "productId=%s\nresponseCode=%d\nmessage=%s",
+        product.id.c_str(),
+        responseCode,
+        msg.c_str());
+
+    auto builder = AlertDialogBuilder::create();
+    builder->setTitle("purchase failure");
+    builder->setMessage(alertMessage);
+    builder->setPositiveButton("OK", nullptr);
+    builder->build()->open(this);
 }
 
 void SampleScene::onPurchaseCanceled(const mingos::Product& product) {
