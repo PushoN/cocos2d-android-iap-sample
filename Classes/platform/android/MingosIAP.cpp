@@ -35,9 +35,9 @@ jobject createJavaPurchaseEventListener(IAPEventListener* listener) {
     }
 
     // run java code:
-    // long delegate = (unsigned long)listener;
+    // long delegate = (long)listener;
     // return new iap.PurchaseEventListener(delegate);
-    return methodInfo.env->NewObject(methodInfo.classID, methodInfo.methodID, (unsigned long)listener);
+    return methodInfo.env->NewObject(methodInfo.classID, methodInfo.methodID, (jlong)listener);
 }
 
 /**
