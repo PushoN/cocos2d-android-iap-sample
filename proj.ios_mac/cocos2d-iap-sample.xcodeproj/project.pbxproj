@@ -49,6 +49,7 @@
 		AE93810F28E2C72C008F6DF9 /* images in Resources */ = {isa = PBXBuildFile; fileRef = AE93810E28E2C72C008F6DF9 /* images */; };
 		AE93811128E2C739008F6DF9 /* sdkbox_config.json in Resources */ = {isa = PBXBuildFile; fileRef = AE93811028E2C739008F6DF9 /* sdkbox_config.json */; };
 		AE93811F28E4125B008F6DF9 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE93811D28E4125B008F6DF9 /* StoreKit.framework */; };
+		AE93812428E4259E008F6DF9 /* PurchaseManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = AE93812328E4259E008F6DF9 /* PurchaseManager.mm */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
@@ -152,6 +153,8 @@
 		AE93810E28E2C72C008F6DF9 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		AE93811028E2C739008F6DF9 /* sdkbox_config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = sdkbox_config.json; sourceTree = "<group>"; };
 		AE93811D28E4125B008F6DF9 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.2.sdk/System/Library/Frameworks/StoreKit.framework; sourceTree = DEVELOPER_DIR; };
+		AE93812128E4259E008F6DF9 /* PurchaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseManager.h; sourceTree = "<group>"; };
+		AE93812328E4259E008F6DF9 /* PurchaseManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PurchaseManager.mm; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -233,14 +236,16 @@
 		1AF87B461F6F77D6007BE51C /* ios */ = {
 			isa = PBXGroup;
 			children = (
-				1A88B2631FC3D9C9005C14AE /* Images.xcassets */,
 				1AF87B471F6F77D6007BE51C /* AppController.h */,
 				1AF87B481F6F77D6007BE51C /* AppController.mm */,
+				1A88B2631FC3D9C9005C14AE /* Images.xcassets */,
 				1AF87B581F6F77D6007BE51C /* Info.plist */,
 				1AF87B591F6F77D6007BE51C /* LaunchScreen.storyboard */,
 				1AF87B5A1F6F77D6007BE51C /* LaunchScreenBackground.png */,
 				1AF87B5B1F6F77D6007BE51C /* main.m */,
 				1AF87B5C1F6F77D6007BE51C /* Prefix.pch */,
+				AE93812128E4259E008F6DF9 /* PurchaseManager.h */,
+				AE93812328E4259E008F6DF9 /* PurchaseManager.mm */,
 				1AF87B5D1F6F77D6007BE51C /* RootViewController.h */,
 				1AF87B5E1F6F77D6007BE51C /* RootViewController.mm */,
 			);
@@ -548,6 +553,7 @@
 				AE93810328E2C714008F6DF9 /* Dialog.cpp in Sources */,
 				AE93810728E2C714008F6DF9 /* ButtonHelper.cpp in Sources */,
 				AE93810428E2C714008F6DF9 /* AlertDialogBuilder.cpp in Sources */,
+				AE93812428E4259E008F6DF9 /* PurchaseManager.mm in Sources */,
 				AE93810628E2C714008F6DF9 /* LabelHelper.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
