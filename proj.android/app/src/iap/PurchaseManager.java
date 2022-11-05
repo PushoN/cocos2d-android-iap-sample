@@ -22,6 +22,9 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 
+import org.cocos2dx.lib.Cocos2dxActivity;
+import org.cocos2dx.lib.Cocos2dxHandler;
+import org.cocos2dx.lib.Cocos2dxHelper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +39,7 @@ import java.util.Objects;
 public class PurchaseManager {
     private static final String TAG = "PurchaseManager";
 
-    private final Activity mActivity;
+    private static PurchaseManager sInstance;
     private PurchaseEventListener mPurchaseEventListener;
     private BillingClient mBillingClient;
 
@@ -51,6 +54,14 @@ public class PurchaseManager {
     private List<JSONObject> mPurchaseHistoryList = new ArrayList<JSONObject>();
     private SkuDetails mCurrentRequestPurchaseSkuDetails;
     private String mLicenseKey;
+
+    public static PurchaseManager getInstance() {
+        if(sInstance == null) {
+            sInstance = new PurchaseManager();
+        }
+
+        return sInstance;
+    }
 
     private PurchasesUpdatedListener mPurchasesUpdatedListener = new PurchasesUpdatedListener() {
         @Override
@@ -88,12 +99,11 @@ public class PurchaseManager {
         mPurchaseEventListener.onPurchaseSuccess(product);
     }
 
-    public PurchaseManager(Activity activity) {
-        mActivity = activity;
+    private PurchaseManager() {
     }
 
     public Activity getActivity() {
-        return mActivity;
+        return Cocos2dxHelper.getActivity();
     }
 
     public void setPurchaseEventListener(PurchaseEventListener listener) {
@@ -105,6 +115,11 @@ public class PurchaseManager {
     }
 
     public void init(String sdkboxConfigJsonString) {
+        if(mBillingClient != null) {
+            mBillingClient.endConnection();
+            mBillingClient = null;
+        }
+
         try {
             JSONObject configJson = new JSONObject(sdkboxConfigJsonString);
             JSONObject iapJson = configJson.getJSONObject("android").getJSONObject("iap");

@@ -14,12 +14,12 @@ static const std::string ConfigJsonPath = "sdkbox_config.json";
  */
 jobject getJavaPurchaseManager() {
     JniMethodInfo methodInfo;
-    if (!JniHelper::getStaticMethodInfo(methodInfo, "org/cocos2dx/cpp/AppActivity", "getPurchaseManager", "()Liap/PurchaseManager;")) {
-        CC_ASSERT("can not get method info: org.cocos2dx.cpp.AppActivity#getPurchaseManager()");
+    if (!JniHelper::getStaticMethodInfo(methodInfo, "iap/PurchaseManager", "getInstance", "()Liap/PurchaseManager;")) {
+        CC_ASSERT("can not get method info: iap.PurchaseManager#getInstance()");
     }
 
     // run java code:
-    // return AppActivity.getPurchaseManager();
+    // return PurchaseManager.getInstance();
     return methodInfo.env->CallStaticObjectMethod(methodInfo.classID, methodInfo.methodID);
 }
 

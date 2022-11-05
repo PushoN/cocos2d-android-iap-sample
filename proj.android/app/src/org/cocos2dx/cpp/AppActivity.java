@@ -37,7 +37,6 @@ import iap.PurchaseManager;
 
 public class AppActivity extends Cocos2dxActivity {
     private static final String TAG = "AppActivity";
-    private PurchaseManager mPurchaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +58,6 @@ public class AppActivity extends Cocos2dxActivity {
             getWindow().setAttributes(lp);
         }
         // DO OTHER INITIALIZATION BELOW
-
-        mPurchaseManager = new PurchaseManager(this);
-    }
-
-    public static @NonNull PurchaseManager getPurchaseManager() {
-        AppActivity activity = (AppActivity)Cocos2dxHelper.getActivity();
-        if(activity.mPurchaseManager == null) {
-            activity.mPurchaseManager = new PurchaseManager(activity);
-        }
-
-        return activity.mPurchaseManager;
     }
 
 }

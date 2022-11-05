@@ -5,7 +5,7 @@ android {
     buildToolsVersion '33.0.0'
 
     defaultConfig {
-        applicationId "your package name"
+        applicationId "jp.stage.game.cutinbattle"
         minSdkVersion PROP_MIN_SDK_VERSION
         targetSdkVersion PROP_TARGET_SDK_VERSION
         versionCode 1
