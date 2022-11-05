@@ -22,8 +22,6 @@ import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
 
-import org.cocos2dx.lib.Cocos2dxActivity;
-import org.cocos2dx.lib.Cocos2dxHandler;
 import org.cocos2dx.lib.Cocos2dxHelper;
 import org.json.JSONArray;
 import org.json.JSONException;

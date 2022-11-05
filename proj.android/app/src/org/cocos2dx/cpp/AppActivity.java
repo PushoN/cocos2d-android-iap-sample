@@ -28,12 +28,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
 
-import androidx.annotation.NonNull;
-
 import org.cocos2dx.lib.Cocos2dxActivity;
-import org.cocos2dx.lib.Cocos2dxHelper;
-
-import iap.PurchaseManager;
 
 public class AppActivity extends Cocos2dxActivity {
     private static final String TAG = "AppActivity";
