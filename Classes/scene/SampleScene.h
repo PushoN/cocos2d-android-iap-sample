@@ -28,6 +28,8 @@ private:
     void onConsumeFailure(const mingos::Product& product, const mingos::BillingResponseCode& responseCode, const std::string& msg) override;
     void onRestoreSuccess(const std::vector<mingos::Product>& products) override;
     void onRestoreFailure(const mingos::BillingResponseCode& responseCode, const std::string& msg) override;
+    void onAcknowledgeSuccess(const mingos::Product& product) override;
+    void onAcknowledgeFailure(const mingos::Product& product, const mingos::BillingResponseCode& responseCode, const std::string& msg) override;
 };
 
 #endif

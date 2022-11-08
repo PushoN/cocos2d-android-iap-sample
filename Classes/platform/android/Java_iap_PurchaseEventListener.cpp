@@ -49,6 +49,7 @@ Product getProductFromJson(const std::string& jsonString) {
     product.receipt = json["receipt"].string_value();
     product.receiptCipheredPayload= json["receiptCipheredPayload"].string_value();
     product.transactionID = json["transactionID"].string_value();
+    product.quantity = (int)json["quantity"].number_value();
 
     return product;
 }
@@ -66,6 +67,8 @@ extern "C"
     JNIEXPORT void JNICALL Java_iap_PurchaseEventListener_onConsumeFailure(JNIEnv* env, jobject thiz, jlong delegate, jstring productJsonString, jint responseCode, jstring message);
     JNIEXPORT void JNICALL Java_iap_PurchaseEventListener_onRestoreSuccess(JNIEnv* env, jobject thiz, jlong delegate, jstring productListJsonString);
     JNIEXPORT void JNICALL Java_iap_PurchaseEventListener_onRestoreFailure(JNIEnv* env, jobject thiz, jlong delegate, jint responseCode, jstring message);
+    JNIEXPORT void JNICALL Java_iap_PurchaseEventListener_onAcknowledgeSuccess(JNIEnv* env, jobject thiz, jlong delegate, jstring productJsonString);
+    JNIEXPORT void JNICALL Java_iap_PurchaseEventListener_onAcknowledgeFailure(JNIEnv* env, jobject thiz, jlong delegate, jstring productJsonString, jint responseCode, jstring message);
 }
 
 JNIEXPORT void JNICALL Java_iap_PurchaseEventListener_onInitialized(JNIEnv* env, jobject thiz, jlong delegate, jboolean success) {
@@ -199,5 +202,25 @@ JNIEXPORT void JNICALL Java_iap_PurchaseEventListener_onRestoreFailure(JNIEnv* e
 
     callFuncInUIThread([listener, resCode, msg] {
         listener->onRestoreFailure(resCode, msg);
+    });
+}
+
+JNIEXPORT void JNICALL Java_iap_PurchaseEventListener_onAcknowledgeSuccess(JNIEnv* env, jobject thiz, jlong delegate, jstring productJsonString) {
+    auto listener = reinterpret_cast<IAPEventListener*>(delegate);
+    Product product = getProductFromJson(JniHelper::jstring2string(productJsonString));
+
+    callFuncInUIThread([listener, product] {
+        listener->onAcknowledgeSuccess(product);
+    });
+}
+
+JNIEXPORT void JNICALL Java_iap_PurchaseEventListener_onAcknowledgeFailure(JNIEnv* env, jobject thiz, jlong delegate, jstring productJsonString, jint responseCode, jstring message) {
+    auto listener = reinterpret_cast<IAPEventListener*>(delegate);
+    Product product = getProductFromJson(JniHelper::jstring2string(productJsonString));
+    auto resCode = static_cast<BillingResponseCode>(responseCode);
+    std::string msg = JniHelper::jstring2string(message);
+
+    callFuncInUIThread([listener, product, resCode, msg] {
+        listener->onAcknowledgeFailure(product, resCode, msg);
     });
 }

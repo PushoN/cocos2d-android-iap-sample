@@ -16,6 +16,7 @@ public class Product {
     String receiptCipheredPayload;
     String receipt;
     String transactionID;
+    int quantity;
 
     public static Product createFromSkuDetails(SkuDetails skuDetails, String type) {
         Product product = new Product();
@@ -28,6 +29,7 @@ public class Product {
         product.receipt = "";
         product.receiptCipheredPayload = "";
         product.transactionID = "";
+        product.quantity = 1;
 
         double priceValue = (double)skuDetails.getPriceAmountMicros() / 1000000.0;
         product.priceValue = (float)priceValue;
@@ -48,6 +50,7 @@ public class Product {
         json.put("receipt", receipt);
         json.put("receiptCipheredPayload", receiptCipheredPayload);
         json.put("transactionID", transactionID);
+        json.put("quantity", quantity);
 
         return json;
     }

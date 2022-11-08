@@ -143,6 +143,8 @@ void SampleScene::onPurchaseSuccess(const mingos::Product& product) {
 
     if(product.type == mingos::IAP_Type::CONSUMABLE) {
         mingos::IAP::consume(product.id);
+    } else if (product.type == mingos::IAP_Type::NON_CONSUMABLE) {
+        mingos::IAP::acknowledge(product.id);
     }
 
     std::string alertMessage = StringUtils::format(
@@ -164,6 +166,8 @@ void SampleScene::onPurchaseFailure(const mingos::Product& product, const mingos
     if(responseCode == mingos::BillingResponseCode::ITEM_ALREADY_OWNED) {
         if(product.type == mingos::IAP_Type::CONSUMABLE) {
             mingos::IAP::consume(product.id);
+        } else if (product.type == mingos::IAP_Type::NON_CONSUMABLE) {
+            mingos::IAP::acknowledge(product.id);
         }
     }
 
@@ -208,4 +212,13 @@ void SampleScene::onRestoreSuccess(const std::vector<mingos::Product>& products)
 
 void SampleScene::onRestoreFailure(const mingos::BillingResponseCode& responseCode, const std::string& msg) {
     CCLOG("SampleScene::onRestoreFailure:responseCode=%d, msg=%s", static_cast<int>(responseCode), msg.c_str());
+}
+
+void SampleScene::onAcknowledgeSuccess(const mingos::Product& product) {
+    CCLOG("onAcknowledgeSuccess: product.id=%s", product.id.c_str());
+}
+
+void SampleScene::onAcknowledgeFailure(const mingos::Product& product, const mingos::BillingResponseCode& responseCode, const std::string& msg) {
+    CCLOG("onAcknowledgeFailure: product=%s, responseCode=%d, msg=%s",
+      product.toJson().dump().c_str(), static_cast<int>(responseCode), msg.c_str());
 }

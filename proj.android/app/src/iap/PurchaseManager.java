@@ -13,6 +13,8 @@ import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.ConsumeResponseListener;
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchaseHistoryRecord;
 import com.android.billingclient.api.PurchaseHistoryResponseListener;
@@ -93,6 +95,7 @@ public class PurchaseManager {
         product.transactionID = purchase.getOrderId();
         product.receipt = purchase.getOriginalJson();
         product.receiptCipheredPayload = purchase.getSignature();
+        product.quantity = purchase.getQuantity();
 
         mPurchaseEventListener.onPurchaseSuccess(product);
     }
@@ -338,6 +341,7 @@ public class PurchaseManager {
                           product.transactionID = purchase.getOrderId();
                           product.receipt = purchase.getOriginalJson();
                           product.receiptCipheredPayload = purchase.getSignature();
+                          product.quantity = purchase.getQuantity();
 
                           productList.put(product.toJson());
                       }
@@ -417,6 +421,7 @@ public class PurchaseManager {
                 product.transactionID = targetPurchase.getOrderId();
                 product.receipt = targetPurchase.getOriginalJson();
                 product.receiptCipheredPayload = targetPurchase.getSignature();
+                product.quantity = targetPurchase.getQuantity();
 
                 ConsumeParams params = ConsumeParams.newBuilder()
                         .setPurchaseToken(targetPurchase.getPurchaseToken())
@@ -429,6 +434,65 @@ public class PurchaseManager {
                             mPurchaseEventListener.onConsumeSuccess(product);
                         }else {
                             mPurchaseEventListener.onConsumeFailure(product, billingResult.getResponseCode(), billingResult.getDebugMessage());
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    public void acknowledge(final String productId) {
+        if(mPurchaseEventListener == null) {
+            return;
+        }
+
+        if(!isInitialized()) {
+            return;
+        }
+
+        mBillingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP, new PurchasesResponseListener() {
+            @Override
+            public void onQueryPurchasesResponse(@NonNull BillingResult billingResult, @NonNull List<Purchase> purchases) {
+                SkuDetails skuDetails = getSkuDetailsByProductId(productId);
+                if(skuDetails == null) {
+                    return;
+                }
+                final Product product = getProductFromSkuDetails(skuDetails);
+
+                if(billingResult.getResponseCode() != BillingResponseCode.OK) {
+                    mPurchaseEventListener.onConsumeFailure(product, billingResult.getResponseCode(), billingResult.getDebugMessage());
+                    return;
+                }
+
+                Purchase targetPurchase = null;
+                for(Purchase purchase : purchases) {
+                    if(purchase.getSkus().get(0).equals(productId)) {
+                        targetPurchase = purchase;
+                        break;
+                    }
+                }
+
+                if(targetPurchase == null) {
+                    mPurchaseEventListener.onConsumeFailure(product, BillingResponseCode.ERROR, "no target purchase");
+                    return;
+                }
+
+                product.transactionID = targetPurchase.getOrderId();
+                product.receipt = targetPurchase.getOriginalJson();
+                product.receiptCipheredPayload = targetPurchase.getSignature();
+                product.quantity = targetPurchase.getQuantity();
+
+                AcknowledgePurchaseParams params = AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(targetPurchase.getPurchaseToken())
+                        .build();
+
+                mBillingClient.acknowledgePurchase(params, new AcknowledgePurchaseResponseListener() {
+                    @Override
+                    public void onAcknowledgePurchaseResponse(@NonNull BillingResult billingResult) {
+                        if(billingResult.getResponseCode() == BillingResponseCode.OK) {
+                            mPurchaseEventListener.onAcknowledgeSuccess(product);
+                        }else {
+                            mPurchaseEventListener.onAcknowledgeFailure(product, billingResult.getResponseCode(), billingResult.getDebugMessage());
                         }
                     }
                 });

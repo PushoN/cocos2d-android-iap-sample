@@ -153,3 +153,15 @@ void IAP::restore() {
 
     methodInfo.env->CallVoidMethod(javaPurchaseManager, methodInfo.methodID);
 }
+
+void IAP::acknowledge(const std::string& productId) {
+    jobject javaPurchaseManager = getJavaPurchaseManager();
+
+    JniMethodInfo methodInfo;
+    if (!JniHelper::getMethodInfo(methodInfo, "iap/PurchaseManager", "acknowledge", "(Ljava/lang/String;)V")) {
+        CC_ASSERT("can not get method info: iap.PurchaseManager#acknowledge()");
+    }
+
+    jstring jstrProductId = methodInfo.env->NewStringUTF(productId.c_str());
+    methodInfo.env->CallVoidMethod(javaPurchaseManager, methodInfo.methodID, jstrProductId);
+}

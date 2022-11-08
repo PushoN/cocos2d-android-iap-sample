@@ -31,6 +31,7 @@ namespace mingos {
         std::string receiptCipheredPayload;
         std::string receipt;
         std::string transactionID;
+        int quantity;
 
         json11::Json toJson() const {
             auto json = json11::Json::object{
@@ -44,6 +45,7 @@ namespace mingos {
                 {"receipt", receipt},
                 {"receiptCipheredPayload", receiptCipheredPayload},
                 {"transactionID", transactionID},
+                {"quantity", quantity},
             };
 
             return json;
@@ -78,6 +80,8 @@ namespace mingos {
         virtual void onConsumeFailure(const Product& product, const BillingResponseCode& responseCode, const std::string& msg) = 0;
         virtual void onRestoreSuccess(const std::vector<Product>& products) = 0;
         virtual void onRestoreFailure(const BillingResponseCode& responseCode, const std::string& msg) = 0;
+        virtual void onAcknowledgeSuccess(const Product& product) = 0;
+        virtual void onAcknowledgeFailure(const Product& product, const BillingResponseCode& responseCode, const std::string& msg) = 0;
     };
 
     class IAP {
@@ -94,6 +98,12 @@ namespace mingos {
          * @param productId
          */
         static void consume(const std::string& productId);
+
+        /**
+         * for android
+         * @param productId
+         */
+        static void acknowledge(const std::string& productId);
 
         /**
         * get all purchase history, include cancelled, expired
