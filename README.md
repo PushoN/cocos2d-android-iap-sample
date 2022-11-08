@@ -73,6 +73,17 @@ android {
 
 Start Android Studio and open the proj.android directory.
 
+## About the work for release builds
+
+Remember to add these lines to proguard-rules.pro.
+Forgetting to do this will cause the app to crash in the release build.
+
+* proj.android/app/proguard-rules.pro
+```
+-keep class iap.** { *; }
+-dontwarn iap.**
+```
+
 ## Author
 
 mingos
