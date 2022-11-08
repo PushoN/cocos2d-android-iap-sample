@@ -23,6 +23,8 @@ public class PurchaseEventListener {
     private native void onConsumeFailure(long delegate, String productJsonString, int responseCode, String message);
     private native void onRestoreSuccess(long delegate, String productListJsonString);
     private native void onRestoreFailure(long delegate, int responseCode, String message);
+    private native void onAcknowledgeSuccess(long delegate, String productJsonString);
+    private native void onAcknowledgeFailure(long delegate, String productJsonString, int responseCode, String message);
 
     /**
      * set C++ PurchaseEventListener pointer address
@@ -89,6 +91,20 @@ public class PurchaseEventListener {
 
     void onQueryPurchasesFailure(int responseCode, String debugMessage) {
         onRestoreFailure(mDelegate, responseCode, debugMessage);
+    }
+
+    void onAcknowledgeSuccess(@NonNull Product product) {
+        try {
+            onAcknowledgeSuccess(mDelegate, product.toJson().toString());
+        }catch(JSONException ignored) {
+        }
+    }
+
+    void onAcknowledgeFailure(@NonNull Product product, int responseCode, String debugMessage) {
+        try {
+            onAcknowledgeFailure(mDelegate, product.toJson().toString(), responseCode, debugMessage);
+        }catch(JSONException ignored) {
+        }
     }
 
 }
